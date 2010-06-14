@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/tests">
+        <file alias="tests.xml">tests/tests-cse202-su2010.xml</file>
+    </qresource>
+</RCC>
