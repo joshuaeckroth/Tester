@@ -5,15 +5,18 @@
 #include <QMetaType>
 
 #include "testcase.h"
+#include "inputoutput.h"
 
 Runner::Runner(QString _program, TestCase *_t)
-    : p(NULL), program(_program), t(_t)
+    : p(NULL), program(_program), t(_t), io(NULL)
 {
 }
 
 void Runner::run()
 {
     t->reset();
+    io = t->nextInputOutput();
+    waitingPrompt = true;
     p = new QProcess;
 
     qRegisterMetaType<QProcess::ProcessError>("QProcess::ProcessError");
@@ -48,16 +51,55 @@ void Runner::processStarted()
 
 void Runner::readyReadStandardOutput()
 {
-    QByteArray b = p->readAllStandardOutput();
-    QString output(b);
-    qDebug() << QString("output: %1").arg(output);
-    if(b == QString("Enter x: "))
+    QString output(p->readAllStandardOutput());
+    output.remove(QRegExp("\\s"));
+
+    InputOutput *nextIo = t->peekNextInputOutput();
+
+    QString ioPrompt = io->getPrompt();
+    ioPrompt.remove(QRegExp("\\s"));
+
+    QString ioOutput = io->getOutput();
+    ioOutput.remove(QRegExp("\\s"));
+
+    QString nextPrompt;
+    if(nextIo)
     {
-        p->write(QString("33\n").toAscii());
+        nextPrompt = nextIo->getPrompt();
+        nextPrompt.remove(QRegExp("\\s"));
     }
-    else
+
+    if(io)
     {
-        p->write("99\n");
+        if(waitingPrompt)
+        {
+            if(0 == output.compare(ioPrompt, Qt::CaseInsensitive))
+            {
+                qDebug() << QString("matched prompt: %1").arg(ioPrompt);
+
+                p->write(QString("%1\n").arg(io->getInput()).toAscii());
+                waitingPrompt = false;
+            }
+            else
+            {
+                qDebug() << QString("failed prompt: %1\ngot: %2").arg(ioPrompt).arg(output);
+            }
+        }
+        else
+        {
+            if(0 == output.compare(QString("%1%2").arg(ioOutput).arg(nextPrompt), Qt::CaseInsensitive))
+            {
+                qDebug() << QString("match output + next prompt: %1/%2").arg(ioOutput).arg(nextPrompt);
+                io = t->nextInputOutput();
+                if(io)
+                    p->write(QString("%1\n").arg(io->getInput()).toAscii());
+            }
+            else
+            {
+                qDebug() << QString("failed match output + next prompt: %1/%2--\ngot: %3")
+                        .arg(ioOutput).arg(nextPrompt).arg(output);
+            }
+        }
     }
 }
 

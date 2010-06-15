@@ -15,3 +15,8 @@ void Assignment::addTestCase(TestCase *t)
 {
     tests << t;
 }
+
+QList<TestCase*> Assignment::getTestCases()
+{
+    return tests;
+}

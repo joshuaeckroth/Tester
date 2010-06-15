@@ -12,6 +12,7 @@ public:
     void setName(QString _name);
     QString getName() const;
     void addTestCase(TestCase *t);
+    QList<TestCase*> getTestCases();
 
 private:
     QString name;

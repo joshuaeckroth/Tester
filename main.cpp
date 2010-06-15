@@ -1,9 +1,12 @@
 #include <QtGui/QApplication>
 #include <QFile>
 #include <QDebug>
+#include <QList>
 #include "mainwindow.h"
 #include "runner.h"
 #include "assignmentset.h"
+#include "assignment.h"
+#include "testcase.h"
 #include "testsreader.h"
 
 int main(int argc, char *argv[])
@@ -18,8 +21,14 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    //Runner *r = new Runner(QString("c:\\users\\josh\\documents\\school\\202\\TestExample\\debug\\TestExample.exe"));
-    //r->start();
+    QList<Assignment*> assignments = as->getAssignments();
+    QList<TestCase*> testCases = assignments[0]->getTestCases();
+    for(int i = 0; i < testCases.size(); i++)
+    {
+        qDebug() << QString("current test case: %1").arg(testCases[i]->getName());
+        Runner *r = new Runner(QString("c:\\users\\josh\\documents\\school\\202\\TestExample\\debug\\TestExample.exe"), testCases[i]);
+        r->start();
+    }
 
     QApplication a(argc, argv);
     MainWindow w(as);

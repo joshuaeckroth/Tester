@@ -5,6 +5,7 @@
 #include <QProcess>
 
 class TestCase;
+class InputOutput;
 
 class Runner : public QThread
 {
@@ -23,6 +24,8 @@ private:
     QProcess *p;
     QString program;
     TestCase *t;
+    InputOutput *io;
+    bool waitingPrompt;
 };
 
 #endif // RUNNER_H

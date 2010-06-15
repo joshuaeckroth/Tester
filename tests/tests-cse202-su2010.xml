@@ -8,9 +8,9 @@
                 <output>You entered 33.</output>
             </io>
             <io>
-                <prompt>Enter y: </prompt>
+                <prompt>Enter again: </prompt>
                 <input>99</input>
-                <output>You entered 99.</output>
+                <output>You entered again 99.</output>
             </io>
         </test>
     </assignment>

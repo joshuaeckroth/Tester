@@ -11,9 +11,11 @@ class TestCase
 public:
     TestCase();
     void setName(QString _name);
+    QString getName() const;
     void addInputOutput(InputOutput *p);
     void reset();
     InputOutput *nextInputOutput();
+    InputOutput *peekNextInputOutput() const;
 
 private:
     QString name;
