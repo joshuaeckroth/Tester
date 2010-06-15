@@ -116,8 +116,8 @@ QString Runner::markMismatch(QString a, QString b)
     for(i = 0, j = 0; i < a.length() && j < b.length(); i++, j++)
     {
         // skip spaces
-        if(space.exactMatch(QString(a[i]))) i++;
-        if(space.exactMatch(QString(b[j]))) j++;
+        while(space.exactMatch(QString(a[i]))) i++;
+        while(space.exactMatch(QString(b[j]))) j++;
 
         if(i < a.length() && j < b.length())
         {
