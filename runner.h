@@ -26,6 +26,8 @@ private:
     TestCase *t;
     InputOutput *io;
     bool waitingPrompt;
+
+    QString markMismatch(QString a, QString b);
 };
 
 #endif // RUNNER_H

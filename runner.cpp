@@ -52,7 +52,8 @@ void Runner::processStarted()
 void Runner::readyReadStandardOutput()
 {
     QString output(p->readAllStandardOutput());
-    output.remove(QRegExp("\\s"));
+    QString outputClean = output;
+    outputClean.remove(QRegExp("\\s"));
 
     InputOutput *nextIo = t->peekNextInputOutput();
 
@@ -73,7 +74,7 @@ void Runner::readyReadStandardOutput()
     {
         if(waitingPrompt)
         {
-            if(0 == output.compare(ioPrompt, Qt::CaseInsensitive))
+            if(0 == outputClean.compare(ioPrompt, Qt::CaseInsensitive))
             {
                 qDebug() << QString("matched prompt: %1").arg(ioPrompt);
 
@@ -82,12 +83,12 @@ void Runner::readyReadStandardOutput()
             }
             else
             {
-                qDebug() << QString("failed prompt: %1\ngot: %2").arg(ioPrompt).arg(output);
+                qDebug() << QString("failed prompt: %1\ngot: %2").arg(ioPrompt).arg(outputClean);
             }
         }
         else
         {
-            if(0 == output.compare(QString("%1%2").arg(ioOutput).arg(nextPrompt), Qt::CaseInsensitive))
+            if(0 == outputClean.compare(QString("%1%2").arg(ioOutput).arg(nextPrompt), Qt::CaseInsensitive))
             {
                 qDebug() << QString("match output + next prompt: %1/%2").arg(ioOutput).arg(nextPrompt);
                 io = t->nextInputOutput();
@@ -96,8 +97,8 @@ void Runner::readyReadStandardOutput()
             }
             else
             {
-                qDebug() << QString("failed match output + next prompt: %1/%2--\ngot: %3")
-                        .arg(ioOutput).arg(nextPrompt).arg(output);
+                qDebug() << QString("failed match output + next prompt: %1/%2\nerror: %3")
+                        .arg(ioOutput).arg(nextPrompt).arg(markMismatch(QString("%1%2").arg(ioOutput).arg(nextPrompt), output));
             }
         }
     }
@@ -106,4 +107,38 @@ void Runner::readyReadStandardOutput()
 void Runner::processFinished(int code, QProcess::ExitStatus status)
 {
     qDebug() << QString("finished: %1, %2").arg(code).arg(status);
+}
+
+QString Runner::markMismatch(QString a, QString b)
+{
+    QRegExp space("\\s");
+    int i, j;
+    for(i = 0, j = 0; i < a.length() && j < b.length(); i++, j++)
+    {
+        // skip spaces
+        if(space.exactMatch(QString(a[i]))) i++;
+        if(space.exactMatch(QString(b[j]))) j++;
+
+        if(i < a.length() && j < b.length())
+        {
+            if(0 != QString(a[i]).compare(QString(b[j]), Qt::CaseInsensitive))
+            {
+                return QString("%1<span class=\"mismatch\">%2</span>%3")
+                        .arg(b.left(j)).arg(b[j]).arg(b.right(b.size()-j-1));
+            }
+        }
+        else
+        {
+            return QString("%1<span class=\"mismatch\">&nbsp;</span>").arg(b);
+        }
+    }
+
+    int pos;
+    if(j < b.length() && (pos = space.indexIn(b.right(b.size()-j))) != -1)
+    {
+        return QString("%1<span class=\"mismatch\">%2</span>%3")
+                .arg(b.left(pos+j-1)).arg(b[pos+j-1]).arg(b.right(b.size()-pos-j));
+    }
+
+    return b;
 }
