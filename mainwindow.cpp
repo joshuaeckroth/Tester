@@ -9,6 +9,9 @@ MainWindow::MainWindow(AssignmentSet *as, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->middleLayout->setStretchFactor(ui->testCaseTree, 2);
+    ui->middleLayout->setStretchFactor(ui->testResults, 4);
+
     QList<Assignment*> assignments = as->getAssignments();
     for(int i = 0; i < assignments.size(); i++)
     {
