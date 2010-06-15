@@ -52,6 +52,7 @@ void TestsReader::readOneAssignment(Assignment *a)
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == "assignment");
 
+    a->setId(xml.attributes().value("id").toString());
     a->setName(xml.attributes().value("name").toString());
 
     while(xml.readNextStartElement())

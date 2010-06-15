@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <assignmentSet>
-    <assignment name="PA 1 - Blah">
+    <assignment id="pa1" name="PA 1 - Blah">
         <test name="Test 1 - blah">
             <io>
                 <prompt>Enter x: </prompt>
@@ -13,9 +13,21 @@
                 <output>You entered again 99.</output>
             </io>
         </test>
+        <test name="Test 2 - blah">
+            <io>
+                <prompt>Enter x: </prompt>
+                <input>33</input>
+                <output>You entered 33.</output>
+            </io>
+            <io>
+                <prompt>Enter again: </prompt>
+                <input>99</input>
+                <output>You entered again 99.</output>
+            </io>
+        </test>
     </assignment>
-    <assignment name="PA 2 - Blah 2">
-        <test name="Test 1 - blah">
+    <assignment id="pa2" name="PA 2 - Blah 2">
+        <test name="Test 1 - blah 2">
             <io>
                 <prompt>Enter x: </prompt>
                 <input>33</input>

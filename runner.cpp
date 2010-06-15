@@ -52,53 +52,77 @@ void Runner::processStarted()
 void Runner::readyReadStandardOutput()
 {
     QString output(p->readAllStandardOutput());
+
     QString outputClean = output;
     outputClean.remove(QRegExp("\\s"));
 
     InputOutput *nextIo = t->peekNextInputOutput();
 
     QString ioPrompt = io->getPrompt();
-    ioPrompt.remove(QRegExp("\\s"));
+
+    QString ioPromptClean = ioPrompt;
+    ioPromptClean.remove(QRegExp("\\s"));
 
     QString ioOutput = io->getOutput();
-    ioOutput.remove(QRegExp("\\s"));
+
+    QString ioOutputClean = ioOutput;
+    ioOutputClean.remove(QRegExp("\\s"));
 
     QString nextPrompt;
+    QString nextPromptClean;
     if(nextIo)
     {
         nextPrompt = nextIo->getPrompt();
-        nextPrompt.remove(QRegExp("\\s"));
+
+        nextPromptClean = nextPrompt;
+        nextPromptClean.remove(QRegExp("\\s"));
     }
 
     if(io)
     {
         if(waitingPrompt)
         {
-            if(0 == outputClean.compare(ioPrompt, Qt::CaseInsensitive))
+            if(0 == outputClean.compare(ioPromptClean, Qt::CaseInsensitive))
             {
-                qDebug() << QString("matched prompt: %1").arg(ioPrompt);
-
                 p->write(QString("%1\n").arg(io->getInput()).toAscii());
                 waitingPrompt = false;
+
+                programResult += QString("%1 <span class=\"input\">%2</span><br/>")
+                                 .arg(output).arg(io->getInput());
+                testCaseResult += QString("%1 <span class=\"input\">%2</span><br/>")
+                                  .arg(ioPrompt).arg(io->getInput());
             }
             else
             {
-                qDebug() << QString("failed prompt: %1\ngot: %2").arg(ioPrompt).arg(outputClean);
+                programResult += QString("%1").arg(markMismatch(ioPrompt, output));
+                testCaseResult += QString("%1").arg(ioPrompt);
+
+                p->kill();
             }
         }
         else
         {
-            if(0 == outputClean.compare(QString("%1%2").arg(ioOutput).arg(nextPrompt), Qt::CaseInsensitive))
+            if(0 == outputClean.compare(QString("%1%2").arg(ioOutputClean).arg(nextPromptClean), Qt::CaseInsensitive))
             {
-                qDebug() << QString("match output + next prompt: %1/%2").arg(ioOutput).arg(nextPrompt);
+                programResult += (QString("%1").arg(output)).replace(QRegExp("\\r?\\n"), "<br/>");
+                testCaseResult += QString("%1<br/>%2").arg(ioOutput).arg(nextPrompt);
+
                 io = t->nextInputOutput();
                 if(io)
+                {
                     p->write(QString("%1\n").arg(io->getInput()).toAscii());
+
+                    programResult += QString(" <span class=\"input\">%1</span><br/>").arg(io->getInput());
+                    testCaseResult += QString(" <span class=\"input\">%1</span><br/>").arg(io->getInput());
+                }
             }
             else
             {
-                qDebug() << QString("failed match output + next prompt: %1/%2\nerror: %3")
-                        .arg(ioOutput).arg(nextPrompt).arg(markMismatch(QString("%1%2").arg(ioOutput).arg(nextPrompt), output));
+                programResult += (QString("%1").arg(markMismatch(QString("%1%2").arg(ioOutput).arg(nextPrompt), output)))
+                                 .replace(QRegExp("\\r?\\n"), "<br/>");
+                testCaseResult += QString("%1<br/>%2").arg(ioOutput).arg(nextPrompt);
+
+                p->kill();
             }
         }
     }
@@ -106,7 +130,7 @@ void Runner::readyReadStandardOutput()
 
 void Runner::processFinished(int code, QProcess::ExitStatus status)
 {
-    qDebug() << QString("finished: %1, %2").arg(code).arg(status);
+    qDebug() << QString("finished: %1, %2\n%3\n\n%4").arg(code).arg(status).arg(testCaseResult).arg(programResult);
 }
 
 QString Runner::markMismatch(QString a, QString b)

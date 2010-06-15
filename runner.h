@@ -13,6 +13,7 @@ class Runner : public QThread
 public:
     Runner(QString _program, TestCase *_t);
     void run();
+    QString getResult() const;
 
 private slots:
     void error(QProcess::ProcessError);
@@ -26,6 +27,8 @@ private:
     TestCase *t;
     InputOutput *io;
     bool waitingPrompt;
+    QString testCaseResult;
+    QString programResult;
 
     QString markMismatch(QString a, QString b);
 };
