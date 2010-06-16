@@ -12,6 +12,16 @@ Runner::Runner(QString _program, TestCase *_t)
 {
 }
 
+QString Runner::getTestCaseResult() const
+{
+    return testCaseResult;
+}
+
+QString Runner::getProgramResult() const
+{
+    return programResult;
+}
+
 void Runner::run()
 {
     t->reset();
@@ -23,12 +33,16 @@ void Runner::run()
     qRegisterMetaType<QProcess::ExitStatus>("QProcess::ExitStatus");
 
     connect(p, SIGNAL(error(QProcess::ProcessError)), this, SLOT(error(QProcess::ProcessError)));
-    connect(p, SIGNAL(started()), this, SLOT(processStarted()));
     connect(p, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(p, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished(int,QProcess::ExitStatus)));
     p->start(program);
 
     exec();
+}
+
+TestCase *Runner::getTestCase() const
+{
+    return t;
 }
 
 void Runner::error(QProcess::ProcessError e)
@@ -42,11 +56,6 @@ void Runner::error(QProcess::ProcessError e)
     }
 
     qDebug() << error;
-}
-
-void Runner::processStarted()
-{
-    qDebug() << QString("started.");
 }
 
 void Runner::readyReadStandardOutput()
@@ -130,7 +139,7 @@ void Runner::readyReadStandardOutput()
 
 void Runner::processFinished(int code, QProcess::ExitStatus status)
 {
-    qDebug() << QString("finished: %1, %2\n%3\n\n%4").arg(code).arg(status).arg(testCaseResult).arg(programResult);
+    exit(code);
 }
 
 QString Runner::markMismatch(QString a, QString b)

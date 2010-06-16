@@ -2,9 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMutex>
 
 class AssignmentSet;
 class Assignment;
+class Runner;
 
 namespace Ui {
     class MainWindow;
@@ -22,6 +24,8 @@ protected:
 private slots:
     void assignmentChanged(int i);
     void chooseProgram();
+    void runTests();
+    void runnerFinished();
 
 private:
     Ui::MainWindow *ui;
@@ -30,6 +34,8 @@ private:
     bool programValid;
     AssignmentSet *assignmentSet;
     Assignment *assignment;
+    QMutex mutex;
+    QList<Runner*> runners;
 };
 
 #endif // MAINWINDOW_H

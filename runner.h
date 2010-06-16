@@ -13,11 +13,12 @@ class Runner : public QThread
 public:
     Runner(QString _program, TestCase *_t);
     void run();
-    QString getResult() const;
+    QString getTestCaseResult() const;
+    QString getProgramResult() const;
+    TestCase *getTestCase() const;
 
 private slots:
     void error(QProcess::ProcessError);
-    void processStarted();
     void readyReadStandardOutput();
     void processFinished(int, QProcess::ExitStatus);
 
