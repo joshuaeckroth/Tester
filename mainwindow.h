@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 class AssignmentSet;
+class Assignment;
 
 namespace Ui {
     class MainWindow;
@@ -18,8 +19,17 @@ public:
 protected:
     void changeEvent(QEvent *e);
 
+private slots:
+    void assignmentChanged(int i);
+    void chooseProgram();
+
 private:
     Ui::MainWindow *ui;
+    QString program;
+    QString lastDir;
+    bool programValid;
+    AssignmentSet *assignmentSet;
+    Assignment *assignment;
 };
 
 #endif // MAINWINDOW_H
