@@ -9,14 +9,22 @@
 #include "runner.h"
 #include "testcase.h"
 
+const QString MainWindow::testResultsHtml = QString("<html><head><style type=\"text/css\">"
+                                                    "pre { margin-left: 20px; }\n"
+                                                    "p.running { color: rgb(23, 22, 47); }\n"
+                                                    "span.input { font-weight: bold; text-decoration: underline; }\n"
+                                                    "pre.desired { color: rgb(232, 196, 117); }\n"
+                                                    "pre.goodresult { color: rgb(255, 178, 72); }\n"
+                                                    "pre.badresult { color: rgb(199, 96, 88); }\n"
+                                                    "span.mismatch { color: rgb(137, 52, 109); font-weight: bold; "
+                                                    " background-color: #dddddd; text-decoration: underline; }\n"
+                                                    "</style></head><body><!--REPLACE--></body></html>");
+
 MainWindow::MainWindow(AssignmentSet *as, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    ui->middleLayout->setStretchFactor(ui->testCaseTree, 2);
-    ui->middleLayout->setStretchFactor(ui->testResults, 4);
 
     assignmentSet = as;
     QList<Assignment*> assignments = assignmentSet->getAssignments();
@@ -94,17 +102,19 @@ void MainWindow::runTests()
     ui->programButton->setEnabled(false);
     QList<TestCase*> testCases = assignment->getTestCases();
     mutex.lock();
-    QString testResultsPlaceholders;
+    testResults = testResultsHtml;
     for(int i = 0; i < testCases.size(); i++)
     {
-        testResultsPlaceholders += QString("Running test case %1...").arg(testCases[i]->getName());
+        testResults.replace("<!--REPLACE-->",
+                            QString("<p class=\"running\">Running %1...</p><!--REPLACE-->")
+                            .arg(testCases[i]->getName()));
         Runner *r = new Runner(QString(program), testCases[i]);
         runners << r;
         connect(r, SIGNAL(finished()), this, SLOT(runnerFinished()));
         r->start();
     }
     ui->runningLabel->setText(QString("Running %1 tests...").arg(testCases.size()));
-    ui->testResults->setHtml(testResultsPlaceholders);
+    ui->testResults->setHtml(testResults);
     mutex.unlock();
 }
 
@@ -116,10 +126,11 @@ void MainWindow::runnerFinished()
         if(runners[i] != NULL && runners[i]->isFinished())
         {
             TestCase *t = runners[i]->getTestCase();
-            QString testResults = ui->testResults->toHtml();
-            testResults.replace(QString("Running test case %1...").arg(t->getName()),
-                                QString("Test case %1:<br/>%2<br/>%3")
-                                .arg(t->getName()).arg(runners[i]->getTestCaseResult()).arg(runners[i]->getProgramResult()));
+            testResults.replace(QString("<p class=\"running\">Running test case %1...</p>").arg(t->getName()),
+                                QString("<p>%1:<pre class=\"desired\">%2</pre><pre class=\"%3result\">%4</pre></p>")
+                                .arg(t->getName()).arg(runners[i]->getTestCaseResult())
+                                .arg(runners[i]->getProgramResult().contains("mismatch") ? "bad" : "good")
+                                .arg(runners[i]->getProgramResult()));
             ui->testResults->setHtml(testResults);
             disconnect(runners[i], SIGNAL(finished()), this, SLOT(runnerFinished()));
             delete runners[i];

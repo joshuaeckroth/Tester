@@ -36,6 +36,9 @@ private:
     Assignment *assignment;
     QMutex mutex;
     QList<Runner*> runners;
+    QString testResults;
+
+    static const QString testResultsHtml;
 };
 
 #endif // MAINWINDOW_H

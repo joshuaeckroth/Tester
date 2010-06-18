@@ -96,9 +96,9 @@ void Runner::readyReadStandardOutput()
                 p->write(QString("%1\n").arg(io->getInput()).toAscii());
                 waitingPrompt = false;
 
-                programResult += QString("%1 <span class=\"input\">%2</span><br/>")
+                programResult += QString("%1<span class=\"input\">%2</span><br/>")
                                  .arg(output).arg(io->getInput());
-                testCaseResult += QString("%1 <span class=\"input\">%2</span><br/>")
+                testCaseResult += QString("%1<span class=\"input\">%2</span><br/>")
                                   .arg(ioPrompt).arg(io->getInput());
             }
             else
@@ -121,8 +121,8 @@ void Runner::readyReadStandardOutput()
                 {
                     p->write(QString("%1\n").arg(io->getInput()).toAscii());
 
-                    programResult += QString(" <span class=\"input\">%1</span><br/>").arg(io->getInput());
-                    testCaseResult += QString(" <span class=\"input\">%1</span><br/>").arg(io->getInput());
+                    programResult += QString("<span class=\"input\">%1</span><br/>").arg(io->getInput());
+                    testCaseResult += QString("<span class=\"input\">%1</span><br/>").arg(io->getInput());
                 }
             }
             else

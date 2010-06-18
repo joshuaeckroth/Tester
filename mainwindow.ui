@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>684</width>
-    <height>603</height>
+    <width>572</width>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,24 +57,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="middleLayout">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <item>
-       <widget class="QTreeView" name="testCaseTree">
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Sunken</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QTextBrowser" name="testResults"/>
-      </item>
-     </layout>
+     <widget class="QTextBrowser" name="testResults"/>
     </item>
     <item>
      <widget class="QWidget" name="widget_2" native="true">
