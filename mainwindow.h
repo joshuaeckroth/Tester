@@ -24,8 +24,10 @@ protected:
 private slots:
     void assignmentChanged(int i);
     void chooseProgram();
+    void previewTests();
     void runTests();
-    void runnerFinished();
+    void runnerFinished(Runner*);
+    void runnerError(Runner*, QString);
 
 private:
     Ui::MainWindow *ui;
@@ -39,6 +41,8 @@ private:
     QString testResults;
 
     static const QString testResultsHtml;
+
+    void removeRunner(Runner* r);
 };
 
 #endif // MAINWINDOW_H

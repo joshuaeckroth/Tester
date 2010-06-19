@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Tester</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/icons/icons/logo.png</normaloff>:/icons/icons/logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -52,6 +56,10 @@
         <property name="text">
          <string>Choose program...</string>
         </property>
+        <property name="icon">
+         <iconset resource="resources.qrc">
+          <normaloff>:/icons/icons/chooseprogram.png</normaloff>:/icons/icons/chooseprogram.png</iconset>
+        </property>
        </widget>
       </item>
      </layout>
@@ -83,9 +91,24 @@
         </spacer>
        </item>
        <item>
+        <widget class="QPushButton" name="previewButton">
+         <property name="text">
+          <string>Preview Tests</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/icons/preview.png</normaloff>:/icons/icons/preview.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="runTestsButton">
          <property name="text">
           <string>Run Tests</string>
+         </property>
+         <property name="icon">
+          <iconset resource="resources.qrc">
+           <normaloff>:/icons/icons/run.png</normaloff>:/icons/icons/run.png</iconset>
          </property>
         </widget>
        </item>
@@ -96,6 +119,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

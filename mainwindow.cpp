@@ -9,15 +9,17 @@
 #include "runner.h"
 #include "testcase.h"
 
+// colors from: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
 const QString MainWindow::testResultsHtml = QString("<html><head><style type=\"text/css\">"
                                                     "pre { margin-left: 20px; }\n"
-                                                    "p.running { color: rgb(23, 22, 47); }\n"
+                                                    "p.running { color: #729fcf; }\n"
+                                                    "span.error { font-weight: bold; color: #ef2929; }\n"
                                                     "span.input { font-weight: bold; text-decoration: underline; }\n"
-                                                    "pre.desired { color: rgb(232, 196, 117); }\n"
-                                                    "pre.goodresult { color: rgb(255, 178, 72); }\n"
-                                                    "pre.badresult { color: rgb(199, 96, 88); }\n"
-                                                    "span.mismatch { color: rgb(137, 52, 109); font-weight: bold; "
-                                                    " background-color: #dddddd; text-decoration: underline; }\n"
+                                                    "pre.desired { color: #204a87; }\n"
+                                                    "pre.goodresult { color: #4e9a06; }\n"
+                                                    "pre.badresult { color: #ef2929; }\n"
+                                                    "span.mismatch { color: #a40000; font-weight: bold; "
+                                                    " background-color: #eeeeec; text-decoration: underline; }\n"
                                                     "</style></head><body><!--REPLACE--></body></html>");
 
 MainWindow::MainWindow(AssignmentSet *as, QWidget *parent) :
@@ -40,6 +42,7 @@ MainWindow::MainWindow(AssignmentSet *as, QWidget *parent) :
     programValid = false;
     ui->runTestsButton->setEnabled(false);
 
+    connect(ui->previewButton, SIGNAL(clicked()), this, SLOT(previewTests()));
     connect(ui->runTestsButton, SIGNAL(clicked()), this, SLOT(runTests()));
 }
 
@@ -64,6 +67,8 @@ void MainWindow::assignmentChanged(int i)
 {
     QList<Assignment*> assignments = assignmentSet->getAssignments();
     assignment = assignments[i];
+    testResults.clear();
+    ui->testResults->clear();
 }
 
 void MainWindow::chooseProgram()
@@ -96,6 +101,19 @@ void MainWindow::chooseProgram()
     }
 }
 
+void MainWindow::previewTests()
+{
+    testResults = testResultsHtml;
+    QList<TestCase*> testCases = assignment->getTestCases();
+    for(int i = 0; i < testCases.size(); i++)
+    {
+        testResults.replace("<!--REPLACE-->",
+                            QString("<p>%1:<pre class=\"desired\">%2</pre></p><!--REPLACE-->")
+                            .arg(testCases[i]->getName()).arg(testCases[i]->desiredResult()));
+    }
+    ui->testResults->setHtml(testResults);
+}
+
 void MainWindow::runTests()
 {
     ui->runTestsButton->setEnabled(false);
@@ -110,50 +128,70 @@ void MainWindow::runTests()
                             .arg(testCases[i]->getName()));
         Runner *r = new Runner(QString(program), testCases[i]);
         runners << r;
-        connect(r, SIGNAL(finished()), this, SLOT(runnerFinished()));
+        connect(r, SIGNAL(runnerFinished(Runner*)), this, SLOT(runnerFinished(Runner*)));
+        connect(r, SIGNAL(runnerError(Runner*,QString)), this, SLOT(runnerError(Runner*,QString)));
         r->start();
     }
-    ui->runningLabel->setText(QString("Running %1 tests...").arg(testCases.size()));
+    if(runners.size() == 1)
+        ui->runningLabel->setText(QString("Running 1 test..."));
+    else
+        ui->runningLabel->setText(QString("Running %1 tests...").arg(runners.size()));
     ui->testResults->setHtml(testResults);
     mutex.unlock();
 }
 
-void MainWindow::runnerFinished()
+void MainWindow::runnerFinished(Runner *r)
 {
     mutex.lock();
-    for(int i = 0; i < runners.size(); i++)
+    if(runners.contains(r))
     {
-        if(runners[i] != NULL && runners[i]->isFinished())
-        {
-            TestCase *t = runners[i]->getTestCase();
-            testResults.replace(QString("<p class=\"running\">Running test case %1...</p>").arg(t->getName()),
-                                QString("<p>%1:<pre class=\"desired\">%2</pre><pre class=\"%3result\">%4</pre></p>")
-                                .arg(t->getName()).arg(runners[i]->getTestCaseResult())
-                                .arg(runners[i]->getProgramResult().contains("mismatch") ? "bad" : "good")
-                                .arg(runners[i]->getProgramResult()));
-            ui->testResults->setHtml(testResults);
-            disconnect(runners[i], SIGNAL(finished()), this, SLOT(runnerFinished()));
-            delete runners[i];
-            runners[i] = NULL;
-        }
+        TestCase *t = r->getTestCase();
+        testResults.replace(QString("<p class=\"running\">Running %1...</p>").arg(t->getName()),
+                            QString("<p>%1:<pre class=\"desired\">%2</pre><pre class=\"%3result\">%4</pre></p>")
+                            .arg(t->getName()).arg(t->desiredResult())
+                            .arg(r->getProgramResult().contains("mismatch") ? "bad" : "good")
+                            .arg(r->getProgramResult()));
+        ui->testResults->setHtml(testResults);
+        removeRunner(r);
     }
+    mutex.unlock();
+}
 
-    bool allDone = true;
-    for(int i = 0; i < runners.size(); i++)
+void MainWindow::runnerError(Runner* r, QString e)
+{
+    mutex.lock();
+    if(runners.contains(r))
     {
-        if(runners[i] != NULL)
-        {
-            allDone = false;
-            break;
-        }
+        TestCase *t = r->getTestCase();
+        testResults.replace(QString("<p class=\"running\">Running %1...</p>").arg(t->getName()),
+                            QString("<p class=\"running\">Running %1... <span class=\"error\">%2; partial result:</span>"
+                                    "<pre class=\"badresult\">%3</pre></p>")
+                            .arg(t->getName()).arg(e).arg(r->getProgramResult()));
+        ui->testResults->setHtml(testResults);
+        removeRunner(r);
     }
-    if(allDone)
+    mutex.unlock();
+}
+
+void MainWindow::removeRunner(Runner *r)
+{
+    r->wait();
+    disconnect(r, SIGNAL(runnerFinished(Runner*)), this, SLOT(runnerFinished(Runner*)));
+    disconnect(r, SIGNAL(runnerError(Runner*,QString)), this, SLOT(runnerError(Runner*,QString)));
+    delete r;
+
+    runners.removeAt(runners.indexOf(r));
+    if(runners.isEmpty())
     {
         ui->programButton->setEnabled(true);
         ui->runTestsButton->setEnabled(true);
         ui->runningLabel->setText("Ready.");
-        runners.clear();
     }
-
-    mutex.unlock();
+    else
+    {
+        if(runners.size() == 1)
+            ui->runningLabel->setText(QString("Running 1 test..."));
+        else
+            ui->runningLabel->setText(QString("Running %1 tests...").arg(runners.size()));
+    }
 }

@@ -1,4 +1,5 @@
 #include "testcase.h"
+#include "inputoutput.h"
 
 TestCase::TestCase()
 { }
@@ -33,4 +34,15 @@ InputOutput *TestCase::peekNextInputOutput() const
 {
     if(currentIo >= io.size()) return NULL;
     return io[currentIo];
+}
+
+QString TestCase::desiredResult() const
+{
+    QString result;
+    for(int i = 0; i < io.size(); i++)
+    {
+        result += QString("%1<span class=\"input\">%2</span><br/>%3<br/>")
+                  .arg(io[i]->getPrompt()).arg(io[i]->getInput()).arg(io[i]->getOutput());
+    }
+    return result;
 }

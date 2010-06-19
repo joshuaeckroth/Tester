@@ -2,4 +2,10 @@
     <qresource prefix="/tests">
         <file alias="tests.xml">tests/tests-cse202-su2010.xml</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file>icons/logo.png</file>
+        <file>icons/preview.png</file>
+        <file>icons/run.png</file>
+        <file>icons/chooseprogram.png</file>
+    </qresource>
 </RCC>

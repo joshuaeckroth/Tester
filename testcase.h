@@ -16,6 +16,7 @@ public:
     void reset();
     InputOutput *nextInputOutput();
     InputOutput *peekNextInputOutput() const;
+    QString desiredResult() const;
 
 private:
     QString name;
