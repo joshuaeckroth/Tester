@@ -22,6 +22,8 @@ private:
     void readOneAssignment(Assignment *a);
     void readTestCase(TestCase *t);
     void readInputOutput(InputOutput *io);
+    bool readNextStartElement();
+    void skipCurrentElement();
 
     QXmlStreamReader xml;
     AssignmentSet *assignmentSet;

@@ -12,7 +12,7 @@ bool TestsReader::read(QIODevice *device)
 {
     xml.setDevice(device);
 
-    if(xml.readNextStartElement())
+    if(readNextStartElement())
     {
         if (xml.name() == "assignmentSet")
             readAllAssignments();
@@ -35,7 +35,7 @@ void TestsReader::readAllAssignments()
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == "assignmentSet");
 
-    while(xml.readNextStartElement())
+    while(readNextStartElement())
     {
         if(xml.name() == "assignment")
         {
@@ -44,7 +44,7 @@ void TestsReader::readAllAssignments()
             assignmentSet->addAssignment(a);
         }
         else
-            xml.skipCurrentElement();
+            skipCurrentElement();
     }
 }
 
@@ -55,7 +55,7 @@ void TestsReader::readOneAssignment(Assignment *a)
     a->setId(xml.attributes().value("id").toString());
     a->setName(xml.attributes().value("name").toString());
 
-    while(xml.readNextStartElement())
+    while(readNextStartElement())
     {
         if(xml.name() == "test")
         {
@@ -64,7 +64,7 @@ void TestsReader::readOneAssignment(Assignment *a)
             a->addTestCase(t);
         }
         else
-            xml.skipCurrentElement();
+            skipCurrentElement();
     }
 }
 
@@ -74,7 +74,7 @@ void TestsReader::readTestCase(TestCase *t)
 
     t->setName(xml.attributes().value("name").toString());
 
-    while(xml.readNextStartElement())
+    while(readNextStartElement())
     {
         if(xml.name() == "io")
         {
@@ -83,7 +83,7 @@ void TestsReader::readTestCase(TestCase *t)
             t->addInputOutput(io);
         }
         else
-            xml.skipCurrentElement();
+            skipCurrentElement();
     }
 }
 
@@ -91,7 +91,7 @@ void TestsReader::readInputOutput(InputOutput *io)
 {
     Q_ASSERT(xml.isStartElement() && xml.name() == "io");
 
-    while(xml.readNextStartElement())
+    while(readNextStartElement())
     {
         if(xml.name() == "prompt")
             io->setPrompt(xml.readElementText());
@@ -100,7 +100,30 @@ void TestsReader::readInputOutput(InputOutput *io)
         else if(xml.name() == "output")
             io->setOutput(xml.readElementText());
         else
-            xml.skipCurrentElement();
+            skipCurrentElement();
     }
 }
 
+// copied from Qt 4.6 source
+bool TestsReader::readNextStartElement()
+{
+    while (xml.readNext() != QXmlStreamReader::Invalid) {
+        if (xml.isEndElement())
+            return false;
+        else if (xml.isStartElement())
+            return true;
+    }
+    return false;
+}
+
+// copied from Qt 4.6 source
+void TestsReader::skipCurrentElement()
+{
+    int depth = 1;
+    while (depth && xml.readNext() != QXmlStreamReader::Invalid) {
+        if (xml.isEndElement())
+            --depth;
+        else if (xml.isStartElement())
+            ++depth;
+    }
+}
