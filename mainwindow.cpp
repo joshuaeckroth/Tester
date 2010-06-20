@@ -73,7 +73,7 @@ void MainWindow::assignmentChanged(int i)
 
 void MainWindow::chooseProgram()
 {
-    QFileDialog d(this);
+    QFileDialog d(this, "Choose program...");
     if(!lastDir.isEmpty()) d.setDirectory(lastDir);
     d.exec();
     lastDir = d.directory().absolutePath();
