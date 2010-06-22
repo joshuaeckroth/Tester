@@ -1,44 +1,168 @@
 <?xml version="1.0" ?>
 <assignmentSet>
-    <assignment id="pa1" name="PA 1 - Blah">
-        <test name="Test 1 - blah">
+
+    <assignment id="lab2" name="Lab 2">
+        <test name="Test 1">
             <io>
-                <prompt>Enter x: </prompt>
-                <input>33</input>
-                <output>You entered 33.</output>
-            </io>
-            <io>
-                <prompt>Enter again: </prompt>
-                <input>99</input>
-                <output>You entered again 99.</output>
+                <prompt>Enter non-zero integers a, b, and real c: </prompt>
+                <input>1 1 1</input>
+                <output>
+Quotient a/b: 1
+Remainder of a/b: 0
+a^3: 1
+Division c/a: 1.000
+                </output>
             </io>
         </test>
-        <test name="Test 2 - blah">
+        <test name="Test 2">
             <io>
-                <prompt>Enter x: </prompt>
-                <input>33</input>
-                <output>You entered 33.</output>
+                <prompt>Enter non-zero integers a, b, and real c: </prompt>
+                <input>1 2 3</input>
+                <output>
+Quotient a/b: 0
+Remainder of a/b: 1
+a^3: 1
+Division c/a: 3.000
+                </output>
             </io>
+        </test>
+        <test name="Test 3">
             <io>
-                <prompt>Enter again: </prompt>
-                <input>99</input>
-                <output>You entered again 99.</output>
+                <prompt>Enter non-zero integers a, b, and real c: </prompt>
+                <input>-1 2 -3.5</input>
+                <output>
+Quotient a/b: 0
+Remainder of a/b: -1
+a^3: -1
+Division c/a: 3.500
+                </output>
+            </io>
+        </test>
+        <test name="Test 4">
+            <io>
+                <prompt>Enter non-zero integers a, b, and real c: </prompt>
+                <input>73493 -23472 347.34457656</input>
+                <output>
+Quotient a/b: -3
+Remainder of a/b: 3077
+a^3: -1823844051
+Division c/a: 0.005
+                </output>
             </io>
         </test>
     </assignment>
-    <assignment id="pa2" name="PA 2 - Blah 2">
-        <test name="Test 1 - blah 2">
+
+    <assignment id="pa1" name="PA 1">
+        <test name="Test 1">
             <io>
-                <prompt>Enter x: </prompt>
-                <input>33</input>
-                <output>You entered 33.</output>
+                <prompt>Enter number of seconds: </prompt>
+                <input>0</input>
+                <output>0 days, 0 hours, 0 minutes, 0 seconds from now.</output>
             </io>
+        </test>
+        <test name="Test 2">
             <io>
-                <prompt>Enter y: </prompt>
-                <input>99</input>
-                <output>You entered 99.</output>
+                <prompt>Enter number of seconds: </prompt>
+                <input>55</input>
+                <output>0 days, 0 hours, 0 minutes, 55 seconds from now.</output>
+            </io>
+        </test>
+        <test name="Test 3">
+            <io>
+                <prompt>Enter number of seconds: </prompt>
+                <input>-55</input>
+                <output>0 days, 0 hours, 0 minutes, 55 seconds ago.</output>
+            </io>
+        </test>
+        <test name="Test 4">
+            <io>
+                <prompt>Enter number of seconds: </prompt>
+                <input>1000</input>
+                <output>0 days, 0 hours, 16 minutes, 40 seconds from now.</output>
+            </io>
+        </test>
+        <test name="Test 5">
+            <io>
+                <prompt>Enter number of seconds: </prompt>
+                <input>-1000</input>
+                <output>0 days, 0 hours, 16 minutes, 40 seconds ago.</output>
+            </io>
+        </test>
+        <test name="Test 6">
+            <io>
+                <prompt>Enter number of seconds: </prompt>
+                <input>12345678</input>
+                <output>142 days, 21 hours, 21 minutes, 18 seconds from now.</output>
+            </io>
+        </test>
+        <test name="Test 7">
+            <io>
+                <prompt>Enter number of seconds: </prompt>
+                <input>-12345678</input>
+                <output>142 days, 21 hours, 21 minutes, 18 seconds ago.</output>
             </io>
         </test>
     </assignment>
+    
+    <assignment id="pa2" name="PA 2">
+        <test name="Test 1 - No solution">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>0 0 7</input>
+                <output>No solution.</output>
+            </io>
+        </test>
+        <test name="Test 2 - No solution">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>0 0 38.8</input>
+                <output>No solution.</output>
+            </io>
+        </test>
+        <test name="Test 3 - One solution">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>0 0.5 2</input>
+                <output>One solution.</output>
+            </io>
+        </test>
+        <test name="Test 4 - One solution">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>1 -6 9</input>
+                <output>One solution.</output>
+            </io>
+        </test>
+        <test name="Test 5 - Two solutions">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>1 -3 2</input>
+                <output>Two solutions.</output>
+            </io>
+        </test>
+        <test name="Test 6 - Two solutions">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>0.1 -2.5 15</input>
+                <output>Two solutions.</output>
+            </io>
+        </test>
+        <test name="Test 7 - Imaginary solutions">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>1 0 1</input>
+                <output>Two imaginary solutions.</output>
+            </io>
+        </test>
+        <test name="Test 8 - Imaginary solutions">
+            <io>
+                <prompt>Enter values for a, b, and c: </prompt>
+                <input>2 -4 3</input>
+                <output>Two imaginary solutions.</output>
+            </io>
+        </test>
+
+    </assignment>
+
 </assignmentSet>
 

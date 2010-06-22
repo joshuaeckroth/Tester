@@ -1,5 +1,6 @@
 #include <QtGui/QApplication>
 #include <QFile>
+#include <QFileInfo>
 #include <QDebug>
 #include <QList>
 #include <QStringList>
@@ -9,6 +10,7 @@
 #include "assignment.h"
 #include "testcase.h"
 #include "testsreader.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -26,16 +28,26 @@ int main(int argc, char *argv[])
 
 
     QString assignment;
+    QString program;
 
     QStringList args = a.arguments();
     int i;
     if((i = args.indexOf("-a")) != -1)
     {
         assignment = args[i+1];
+        program = args[i+2];
     }
 
-    if(!assignment.isEmpty())
+    if(!assignment.isEmpty() && !program.isEmpty())
     {
+        QFile p(program);
+        QFileInfo pf(p);
+        if(!pf.exists() || !pf.isExecutable() || pf.isDir())
+        {
+            qDebug() << QString("Cannot open program: %1").arg(program);
+            return -2;
+        }
+
         bool foundAssignment = false;
         QList<TestCase*> testCases;
         QList<Assignment*> assignments = as->getAssignments();
@@ -50,19 +62,39 @@ int main(int argc, char *argv[])
         if(!foundAssignment)
         {
             qDebug() << QString("Invalid assignment: %1").arg(assignment);
-            return -2;
+            return -3;
         }
+
+        int failed = 0;
         for(int i = 0; i < testCases.size(); i++)
         {
-            qDebug() << QString("current test case: %1").arg(testCases[i]->getName());
-            Runner *r = new Runner(QString("c:\\users\\josh\\documents\\school\\202\\TestExample\\debug\\TestExample.exe"), testCases[i]);
+            Runner *r = new Runner(program, testCases[i]);
             r->start();
+            if(!r->wait(5000))
+            {
+                qDebug() << QString("Timed out on test %1.").arg(r->getTestCase()->getName());
+                failed++;
+            }
+            else
+            {
+                if(r->getProgramResult().contains("goodresult"))
+                {
+                    qDebug() << QString("Passed test %1.").arg(r->getTestCase()->getName());
+                }
+                else
+                {
+                    qDebug() << QString("Failed test %1.").arg(r->getTestCase()->getName());
+                    failed++;
+                }
+            }
         }
+        qDebug() << QString("Passed %1/%2 tests.").arg(testCases.size() - failed).arg(testCases.size());
+        return 0;
     }
-
-
-
-    MainWindow w(as);
-    w.show();
-    return a.exec();
+    else // so assignment.isEmpty() or program.isEmpty()
+    {
+        MainWindow w(as);
+        w.show();
+        return a.exec();
+    }
 }

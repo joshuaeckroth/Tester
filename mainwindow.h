@@ -39,6 +39,7 @@ private:
     QMutex mutex;
     QList<Runner*> runners;
     QString testResults;
+    int numPassed;
 
     static const QString testResultsHtml;
 

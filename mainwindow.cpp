@@ -69,6 +69,7 @@ void MainWindow::assignmentChanged(int i)
     assignment = assignments[i];
     testResults.clear();
     ui->testResults->clear();
+    ui->runningLabel->setText("Ready.");
 }
 
 void MainWindow::chooseProgram()
@@ -97,6 +98,7 @@ void MainWindow::chooseProgram()
             ui->programLabel->setText(QString("Loaded %1.").arg(pf.baseName()));
             programValid = true;
             ui->runTestsButton->setEnabled(true);
+            ui->runningLabel->setText("Ready.");
         }
     }
 }
@@ -120,13 +122,14 @@ void MainWindow::runTests()
     ui->programButton->setEnabled(false);
     QList<TestCase*> testCases = assignment->getTestCases();
     mutex.lock();
+    numPassed = 0;
     testResults = testResultsHtml;
     for(int i = 0; i < testCases.size(); i++)
     {
         testResults.replace("<!--REPLACE-->",
                             QString("<p class=\"running\">Running %1...</p><!--REPLACE-->")
                             .arg(testCases[i]->getName()));
-        Runner *r = new Runner(QString(program), testCases[i]);
+        Runner *r = new Runner(program, testCases[i]);
         runners << r;
         connect(r, SIGNAL(runnerFinished(Runner*)), this, SLOT(runnerFinished(Runner*)));
         connect(r, SIGNAL(runnerError(Runner*,QString)), this, SLOT(runnerError(Runner*,QString)));
@@ -152,6 +155,7 @@ void MainWindow::runnerFinished(Runner *r)
                             .arg(r->getProgramResult().contains("mismatch") ? "bad" : "good")
                             .arg(r->getProgramResult()));
         ui->testResults->setHtml(testResults);
+        if(r->passed()) numPassed++;
         removeRunner(r);
     }
     mutex.unlock();
@@ -185,7 +189,7 @@ void MainWindow::removeRunner(Runner *r)
     {
         ui->programButton->setEnabled(true);
         ui->runTestsButton->setEnabled(true);
-        ui->runningLabel->setText("Ready.");
+        ui->runningLabel->setText(QString("Passed %1/%2 tests.").arg(numPassed).arg((assignment->getTestCases()).size()));
     }
     else
     {

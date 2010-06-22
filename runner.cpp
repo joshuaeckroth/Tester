@@ -168,3 +168,8 @@ QString Runner::markMismatch(QString a, QString b)
 
     return b;
 }
+
+bool Runner::passed() const
+{
+    return !programResult.contains("mismatch");
+}

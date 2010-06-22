@@ -15,6 +15,7 @@ public:
     void run();
     QString getProgramResult() const;
     TestCase *getTestCase() const;
+    bool passed() const;
 
 signals:
     void runnerFinished(Runner*);
