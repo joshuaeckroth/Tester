@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "testcase.h"
 #include "inputoutput.h"
 

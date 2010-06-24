@@ -65,43 +65,41 @@ void Runner::readyReadStandardOutput()
 
     InputOutput *nextIo = t->peekNextInputOutput();
 
-    QString ioPrompt = io->getPrompt();
-
-    QString ioPromptClean = ioPrompt;
-    ioPromptClean.remove(QRegExp("\\s"));
-
-    QString ioOutput = io->getOutput();
-
-    QString ioOutputClean = ioOutput;
-    ioOutputClean.remove(QRegExp("\\s"));
-
-    QString nextPrompt;
-    QString nextPromptClean;
-    if(nextIo)
-    {
-        nextPrompt = nextIo->getPrompt();
-
-        nextPromptClean = nextPrompt;
-        nextPromptClean.remove(QRegExp("\\s"));
-    }
-
     if(io)
     {
+        QString ioPrompt = io->getPrompt();
+
+        QString ioPromptClean = ioPrompt;
+        ioPromptClean.remove(QRegExp("\\s"));
+
+        QString ioOutput = io->getOutput();
+
+        QString ioOutputClean = ioOutput;
+        ioOutputClean.remove(QRegExp("\\s"));
+
+        QString nextPrompt;
+        QString nextPromptClean;
+        if(nextIo)
+        {
+            nextPrompt = nextIo->getPrompt();
+    
+            nextPromptClean = nextPrompt;
+            nextPromptClean.remove(QRegExp("\\s"));
+        }
+    
         if(waitingPrompt)
         {
             if(0 == outputClean.compare(ioPromptClean, Qt::CaseInsensitive))
             {
                 p->write(QString("%1\n").arg(io->getInput()).toAscii());
                 waitingPrompt = false;
-
-                programResult += QString("%1<span class=\"input\">%2</span><br/>")
+                 programResult += QString("%1<span class=\"input\">%2</span><br/>")
                                  .arg(output).arg(io->getInput());
             }
             else
             {
                 programResult += QString("%1").arg(markMismatch(ioPrompt, output));
-
-                p->kill();
+                 p->kill();
             }
         }
         else
@@ -109,8 +107,7 @@ void Runner::readyReadStandardOutput()
             if(0 == outputClean.compare(QString("%1%2").arg(ioOutputClean).arg(nextPromptClean), Qt::CaseInsensitive))
             {
                 programResult += (QString("%1").arg(output)).replace(QRegExp("\\r?\\n"), "<br/>");
-
-                io = t->nextInputOutput();
+                 io = t->nextInputOutput();
                 if(io)
                 {
                     p->write(QString("%1\n").arg(io->getInput()).toAscii());
@@ -122,8 +119,7 @@ void Runner::readyReadStandardOutput()
             {
                 programResult += (QString("%1").arg(markMismatch(QString("%1%2").arg(ioOutput).arg(nextPrompt), output)))
                                  .replace(QRegExp("\\r?\\n"), "<br/>");
-
-                p->kill();
+                 p->kill();
             }
         }
     }

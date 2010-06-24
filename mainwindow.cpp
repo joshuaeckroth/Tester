@@ -169,8 +169,9 @@ void MainWindow::runnerError(Runner* r, QString e)
         TestCase *t = r->getTestCase();
         testResults.replace(QString("<p class=\"running\">Running %1...</p>").arg(t->getName()),
                             QString("<p class=\"running\">Running %1... <span class=\"error\">%2; partial result:</span>"
-                                    "<pre class=\"badresult\">%3</pre></p>")
-                            .arg(t->getName()).arg(e).arg(r->getProgramResult()));
+                                    "<pre class=\"desired\">%3</pre>"
+                                    "<pre class=\"badresult\">%4</pre></p>")
+                            .arg(t->getName()).arg(e).arg(t->desiredResult()).arg(r->getProgramResult()));
         ui->testResults->setHtml(testResults);
         removeRunner(r);
     }
