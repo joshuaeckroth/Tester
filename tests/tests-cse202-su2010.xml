@@ -51,6 +51,51 @@ Division c/a: 0.005
             </io>
         </test>
     </assignment>
+    
+    <assignment id="lab3" name="Lab 3">
+        <test name="Test 1 (add)">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0.0 + 0.0</input>
+                <output>Answer: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 2 (subtract)">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>123.45 - 123.45</input>
+                <output>Answer: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 3 (multiply)">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>5.67 * -84.27</input>
+                <output>Answer: -477.811</output>
+            </io>
+        </test>
+        <test name="Test 4 (divide)">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>-3497.45 / 354.3385045</input>
+                <output>Answer: -9.870</output>
+            </io>
+        </test>
+        <test name="Test 5 (divide by zero)">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>35 / 0</input>
+                <output>Answer: inf</output>
+            </io>
+        </test>
+        <test name="Test 6 (not a number)">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0.0 / 0.0</input>
+                <output>Answer: nan</output>
+            </io>
+        </test>
+    </assignment>
 
     <assignment id="pa1" name="PA 1">
         <test name="Test 1">
