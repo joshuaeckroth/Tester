@@ -1,6 +1,7 @@
 # -------------------------------------------------
 # Project created by QtCreator 2010-06-10T12:58:15
 # -------------------------------------------------
+CONFIG += qt debug
 QT += xml
 TARGET = Tester
 TEMPLATE = app

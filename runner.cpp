@@ -58,6 +58,7 @@ void Runner::error(QProcess::ProcessError e)
 
 void Runner::readyReadStandardOutput()
 {
+    msleep(250);
     QString output(p->readAllStandardOutput());
 
     QString outputClean = output;

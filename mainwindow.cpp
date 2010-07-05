@@ -11,6 +11,7 @@
 
 // colors from: http://tango.freedesktop.org/Tango_Icon_Theme_Guidelines
 const QString MainWindow::testResultsHtml = QString("<html><head><style type=\"text/css\">"
+                                                    "body { font-size: 16pt; }\n"
                                                     "pre { margin-left: 20px; }\n"
                                                     "p.running { color: #729fcf; }\n"
                                                     "span.error { font-weight: bold; color: #ef2929; }\n"
