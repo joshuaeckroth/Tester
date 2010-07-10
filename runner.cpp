@@ -31,6 +31,8 @@ void Runner::run()
     connect(p, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     connect(p, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processFinished(int,QProcess::ExitStatus)));
     p->start(program);
+    
+    expectingOutput = true;
 
     exec();
 }
@@ -59,6 +61,7 @@ void Runner::error(QProcess::ProcessError e)
 void Runner::readyReadStandardOutput()
 {
     msleep(250);
+    expectingOutput = false;
     QString output(p->readAllStandardOutput());
 
     QString outputClean = output;
@@ -93,14 +96,15 @@ void Runner::readyReadStandardOutput()
             if(0 == outputClean.compare(ioPromptClean, Qt::CaseInsensitive))
             {
                 p->write(QString("%1\n").arg(io->getInput()).toAscii());
+                expectingOutput = true;
                 waitingPrompt = false;
-                 programResult += QString("%1<span class=\"input\">%2</span><br/>")
+                programResult += QString("%1<span class=\"input\">%2</span><br/>")
                                  .arg(output).arg(io->getInput());
             }
             else
             {
                 programResult += QString("%1").arg(markMismatch(ioPrompt, output));
-                 p->kill();
+                p->kill();
             }
         }
         else
@@ -108,10 +112,11 @@ void Runner::readyReadStandardOutput()
             if(0 == outputClean.compare(QString("%1%2").arg(ioOutputClean).arg(nextPromptClean), Qt::CaseInsensitive))
             {
                 programResult += (QString("%1").arg(output)).replace(QRegExp("\\r?\\n"), "<br/>");
-                 io = t->nextInputOutput();
+                io = t->nextInputOutput();
                 if(io)
                 {
                     p->write(QString("%1\n").arg(io->getInput()).toAscii());
+                    expectingOutput = true;
 
                     programResult += QString("<span class=\"input\">%1</span><br/>").arg(io->getInput());
                 }
@@ -120,7 +125,7 @@ void Runner::readyReadStandardOutput()
             {
                 programResult += (QString("%1").arg(markMismatch(QString("%1%2").arg(ioOutput).arg(nextPrompt), output)))
                                  .replace(QRegExp("\\r?\\n"), "<br/>");
-                 p->kill();
+                p->kill();
             }
         }
     }
@@ -128,6 +133,10 @@ void Runner::readyReadStandardOutput()
 
 void Runner::processFinished(int code, QProcess::ExitStatus status)
 {
+    if(expectingOutput)
+    {
+        programResult += QString("<br/><span class=\"mismatch\">(Output ended early.)</span>");
+    }
     exit(code);
     emit runnerFinished(this);
 }

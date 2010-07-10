@@ -32,6 +32,7 @@ private:
     TestCase *t;
     InputOutput *io;
     bool waitingPrompt;
+    bool expectingOutput;
     QString programResult;
 
     QString markMismatch(QString a, QString b);
