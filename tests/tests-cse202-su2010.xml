@@ -96,6 +96,65 @@ Division c/a: 0.005
             </io>
         </test>
     </assignment>
+    
+    <assignment id="lab4" name="Lab 4">
+        <test name="Test 1">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 / 0</input>
+                <output>Done.</output>
+            </io>
+        </test>
+        <test name="Test 2">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 * 0</input>
+                <output>Answer: 0.000</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 + 0</input>
+                <output>Answer: 0.000</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 - 0</input>
+                <output>Answer: 0.000</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 / 0</input>
+                <output>Done.</output>
+            </io>
+        </test>
+        <test name="Test 3">
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>9 * 4</input>
+                <output>Answer: 36.000</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>87 + 0.2</input>
+                <output>Answer: 87.200</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 - 100</input>
+                <output>Answer: -100.000</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0.001 / 0</input>
+                <output>Answer: inf</output>
+            </io>
+            <io>
+                <prompt>Enter a simple mathematical formula: </prompt>
+                <input>0 / 0</input>
+                <output>Done.</output>
+            </io>
+        </test>
+    </assignment>
 
     <assignment id="pa1" name="PA 1">
         <test name="Test 1">
