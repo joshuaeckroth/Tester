@@ -330,7 +330,7 @@ Division c/a: 0.005
                 <output>Done. Largest input: 8. Number of 8's: 1.</output>
             </io>
         </test>
-        <test name="Test 3">
+        <test name="Test 4">
             <io>
                 <prompt>Enter a positive integer (0 to quit): </prompt>
                 <input>5</input>
