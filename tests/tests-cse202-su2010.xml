@@ -156,6 +156,38 @@ Division c/a: 0.005
         </test>
     </assignment>
 
+    <assignment id="lab5" name="Lab 5">
+        <test name="Test 1">
+            <io>
+                <prompt>Enter five values: </prompt>
+                <input>0 0 0 0 0</input>
+                <output>Reversed: 0.000 0.000 0.000 0.000 0.000 average: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 2">
+            <io>
+                <prompt>Enter five values: </prompt>
+                <input>-3.0 -2.0 0.0 2.0 3.0</input>
+                <output>Reversed: 3.000 2.000 0.000 -2.000 -3.000 average: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 3">
+            <io>
+                <prompt>Enter five values: </prompt>
+                <input>0.0001 0.0001 0.0001 0.0001 0.0001</input>
+                <output>Reversed: 0.000 0.000 0.000 0.000 0.000 average: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 4">
+            <io>
+                <prompt>Enter five values: </prompt>
+                <input>4325.43 236.50 -347.34648942 -3354.48 57563.32</input>
+                <output>Reversed: 57563.320 -3354.480 -347.346 236.500 4325.430 average: 11684.685</output>
+            </io>
+        </test>
+    </assignment>
+
+
     <assignment id="pa1" name="PA 1">
         <test name="Test 1">
             <io>
@@ -360,6 +392,78 @@ Division c/a: 0.005
                 <prompt>Enter a positive integer (0 to quit): </prompt>
                 <input>0</input>
                 <output>Done. Largest input: 5. Number of 5's: 4.</output>
+            </io>
+        </test>
+    </assignment>
+
+    <assignment id="pa4" name="PA 4">
+        <test name="Test 1">
+            <io>
+                <prompt>Enter an integer representing the number of values you will provide: </prompt>
+                <input>1</input>
+                <output>You will enter 1 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>0</input>
+                <output>Got it.
+Standard deviation of the values: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 2">
+            <io>
+                <prompt>Enter an integer representing the number of values you will provide: </prompt>
+                <input>3</input>
+                <output>You will enter 3 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>435.45</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>435.45</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>435.45</input>
+                <output>Got it.
+Standard deviation of the values: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 3">
+            <io>
+                <prompt>Enter an integer representing the number of values you will provide: </prompt>
+                <input>5</input>
+                <output>You will enter 5 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>-24.5</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>48.6</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>-7856.4</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>32</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>2382.34645</input>
+                <output>Got it.
+Standard deviation of the values: 3508.040</output>
             </io>
         </test>
     </assignment>
