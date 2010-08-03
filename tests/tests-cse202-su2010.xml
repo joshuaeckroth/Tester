@@ -499,5 +499,90 @@ Standard deviation of the values: 3508.040</output>
         </test>
     </assignment>
 
+    <assignment id="pa5" name="PA 5">
+        <test name="Test 1">
+            <io>
+                <prompt>How many values will you provide? </prompt>
+                <input>1</input>
+                <output>Ok, you will provide 1 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>0</input>
+                <output>Got it.
+min: 0.000, max: 0.000, mean: 0.000</output>
+            </io>
+        </test>
+        <test name="Test 2">
+            <io>
+                <prompt>How many values will you provide? </prompt>
+                <input>1</input>
+                <output>Ok, you will provide 1 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>8.8888</input>
+                <output>Got it.
+min: 8.889, max: 8.889, mean: 8.889</output>
+            </io>
+        </test>
+        <test name="Test 3">
+            <io>
+                <prompt>How many values will you provide? </prompt>
+                <input>3</input>
+                <output>Ok, you will provide 3 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>-5.5</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>0</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>8.8888</input>
+                <output>Got it.
+min: -5.500, max: 8.889, mean: 1.130</output>
+            </io>
+        </test>
+        <test name="Test 4">
+            <io>
+                <prompt>How many values will you provide? </prompt>
+                <input>5</input>
+                <output>Ok, you will provide 5 values.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>-5.5</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>0</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>100000</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>-100000</input>
+                <output>Got it.</output>
+            </io>
+            <io>
+                <prompt>Enter value: </prompt>
+                <input>8.8888</input>
+                <output>Got it.
+min: -100000.000, max: 100000.000, mean: 0.678</output>
+            </io>
+        </test>
+    </assignment>
+
 </assignmentSet>
 
